@@ -1,0 +1,34 @@
+syntax = "proto3";
+package GRPCex;
+option go_package = "./test";
+
+service AuctionService {
+  //given a bid, returns an outcome among {fail, success or exception}
+  rpc bid(AmountMessage) returns (AcknowledgementMessage) {}
+
+  //Comment: if over, it returns the result, else highest bid.
+  rpc Result(Void) returns (OutcomeMessage) {}
+}
+
+message AmountMessage {
+  int64 time = 1;
+  int64 id = 2;
+  string bidderName = 3;
+  double amount = 4;
+}
+
+message AcknowledgementMessage {
+  int64 time = 1;
+  int64 id = 2;
+}
+
+message OutcomeMessage {
+  int64 time = 1;
+  double highestBid = 2;
+  int64 highestBidderID = 3;
+  string highestBidderName = 4;
+  bool ended = 5;
+  int64 endTime = 6;
+}
+
+message Void { }
