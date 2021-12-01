@@ -6,8 +6,13 @@ service AuctionService {
   //given a bid, returns an outcome among {fail, success or exception}
   rpc bid(AmountMessage) returns (AcknowledgementMessage) {}
 
-  //Comment: if over, it returns the result, else highest bid.
+  //if over, it returns the result, else highest bid.
   rpc Result(Void) returns (OutcomeMessage) {}
+}
+
+service ReplicationService {
+  rpc RequestInfo(Void) returns (ReplicationManagerMessage) {}
+  rpc Replicate(AuctionHouseMessage) returns (AcknowledgementMessage) {}
 }
 
 message AmountMessage {
@@ -29,6 +34,28 @@ message OutcomeMessage {
   string highestBidderName = 4;
   bool ended = 5;
   int64 endTime = 6;
+}
+
+message Bidder {
+  int64 id = 1;
+  string name = 2;
+  double highestBid = 3;
+}
+
+message AuctionHouseMessage {
+  repeated Bidder bidders = 1;
+  int64 highestBidderID = 2;
+  int64 endTime = 3;
+  bool ended = 4;
+}
+
+message BooleanMessage {
+  bool value = 1;
+}
+
+message ReplicationManagerMessage {
+  int64 id = 1;
+  bool isLeader = 2;
 }
 
 message Void { }
